@@ -444,47 +444,63 @@ if mol is None:
 else: 
     st.markdown('<p style="color:green; font-weight:bold;">✅ Valid SMILES received!</p>', unsafe_allow_html=True)
 
-df125_new = calculate_rdkit_features(SMILES)
-df125 = df125_new.iloc[:, :125]
-df38 = generate_features_single38(SMILES)
-df128 = fingerprint1(SMILES, 2, 128)
-df7 = get_functional_groups1(SMILES)
+if st.button("Check Application Domain"):  # Runs only when clicked
+    if not SMILES:  
+        st.warning("Please enter a valid SMILES string.")
+    else:
+        # Compute descriptors
+        df125_new = calculate_rdkit_features(SMILES)
+        df125 = df125_new.iloc[:, :125]
+        df38 = generate_features_single38(SMILES)
+        df128 = fingerprint1(SMILES, 2, 128)
+        df7 = get_functional_groups1(SMILES)
 
-# Combine all computed descriptors          
-new_molecule_vector = pd.concat([df125, df128, df7, df38], axis=1)    
-### Loading saved trainning set vectors 
-training_set_vectors = np.load("training_set_vectors.npy")  # Ensure it's a NumPy array
-new_molecule_vector = np.array(new_molecule_vector).reshape(1, -1) 
-scaler = StandardScaler()
-training_set_vectors_scaled = scaler.fit_transform(training_set_vectors)
-new_molecule_scaled = scaler.transform(new_molecule_vector) 
-pca = PCA(n_components=50)  # Reduce to 50 components before t-SNE
-training_set_vectors_pca = pca.fit_transform(training_set_vectors_scaled)
-new_molecule_pca = pca.transform(new_molecule_scaled) 
+        # Combine all computed descriptors          
+        new_molecule_vector = pd.concat([df125, df128, df7, df38], axis=1)    
 
-if new_molecule_pca.ndim == 1:
-    new_molecule_pca = new_molecule_pca.reshape(1, -1)
-# Combine new molecule with the training set for t-SNE fitting
-combined_vectors_pca = np.vstack([training_set_vectors_pca, new_molecule_pca])
+        # Load saved training set vectors 
+        training_set_vectors = np.load("training_set_vectors.npy")  # Ensure it's a NumPy array
+        new_molecule_vector = np.array(new_molecule_vector).reshape(1, -1) 
 
-# Initialize t-SNE
-tsne = TSNE(n_components=2, random_state=42)
+        # Normalize using StandardScaler
+        scaler = StandardScaler()
+        training_set_vectors_scaled = scaler.fit_transform(training_set_vectors)
+        new_molecule_scaled = scaler.transform(new_molecule_vector) 
 
-# Fit t-SNE to the combined data
-combined_vectors_tsne = tsne.fit_transform(combined_vectors_pca)
+        # Apply PCA for dimensionality reduction
+        pca = PCA(n_components=50)
+        training_set_vectors_pca = pca.fit_transform(training_set_vectors_scaled)
+        new_molecule_pca = pca.transform(new_molecule_scaled) 
 
-# Extract t-SNE coordinates for the new molecule (last row)
-new_molecule_tsne1 = combined_vectors_tsne[-1]
-# # Extract t-SNE coordinates for the training data
-training_set_vectors_tsne1 = combined_vectors_tsne[:-1]
-distances = np.linalg.norm(new_molecule_tsne1 - training_set_vectors_tsne1, axis=1)
-distances = np.round(distances, decimals=5)
-min_distance = np.min(distances)
-#st.write(min_distance)
-if min_distance < 0.76:
-    st.markdown('<p style="color:green; font-weight:bold;">✅ The compound is within the Applicability Domain!</p>', unsafe_allow_html=True)
-else:
-    st.markdown('<p style="color:red; font-weight:bold;">❌ Warning: Molecule is outside the models applicability domain. Prediction may be unreliable!</p>', unsafe_allow_html=True)    
+        if new_molecule_pca.ndim == 1:
+            new_molecule_pca = new_molecule_pca.reshape(1, -1)
+
+        # Combine new molecule with the training set for t-SNE
+        combined_vectors_pca = np.vstack([training_set_vectors_pca, new_molecule_pca])
+
+        # Initialize and fit t-SNE
+        tsne = TSNE(n_components=2, random_state=42)
+        combined_vectors_tsne = tsne.fit_transform(combined_vectors_pca)
+
+        # Extract t-SNE coordinates for the new molecule (last row)
+        new_molecule_tsne1 = combined_vectors_tsne[-1]
+
+        # Extract t-SNE coordinates for the training data
+        training_set_vectors_tsne1 = combined_vectors_tsne[:-1]
+
+        # Compute distance
+        distances = np.linalg.norm(new_molecule_tsne1 - training_set_vectors_tsne1, axis=1)
+        distances = np.round(distances, decimals=5)
+        min_distance = np.min(distances)
+
+        st.write(f"Minimum Distance: {min_distance}")
+
+        # Check Applicability Domain (AD)
+        if min_distance < 0.76:
+            st.markdown('<p style="color:green; font-weight:bold;">✅ The compound is within the Applicability Domain!</p>', unsafe_allow_html=True)
+        else:
+            st.markdown('<p style="color:red; font-weight:bold;">❌ Warning: Molecule is outside the model’s applicability domain. Prediction may be unreliable!</p>', unsafe_allow_html=True)
+
 prop=pcp.get_properties([ 'MolecularWeight'], SMILES, 'smiles')
 x = list(map(lambda x: x["CID"], prop)) 
 y=x[0]
@@ -524,11 +540,6 @@ with col1:
         st.image(img, use_column_width=False)
 with col2:
         showmol(xyzview,height=300,width=400) 
-      #if st.button("predict"):
-     # if st.button("Predict"):
-	#      st.write("This is some content that should remain on the page.")        	      
-          #page1()
-      #        st.write("work in Progress") 
 
 if st.button("Predict"):
     try:

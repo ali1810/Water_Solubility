@@ -1,0 +1,14 @@
+# Ignore unnecessary directories
+*.log
+__pycache__/
+node_modules/
+tests/
+#docs/
+*.md
+
+# Ignore large data files
+*.csv
+*.npy
+*.pkl
+*.json
+models/

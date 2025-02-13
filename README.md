@@ -16,7 +16,7 @@ This repository provides a machine learning-based model for predicting the water
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/ali1810/Water_Solubility.git
-cd water-solubility-prediction
+cd Water_Solubility
 ```
 
 ### 2. Create a Virtual Environment

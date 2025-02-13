@@ -1,6 +1,5 @@
 
-## How to Set Up and Run the Project Locally
-
+# README.md
 
 # Water Solubility Prediction
 
@@ -38,6 +37,10 @@ pip install -r requirements.txt
 ```
 
 ## Running the Model
+
+### Streamlit Cloud Version
+Along with the local version, we also provide a **Streamlit Cloud** deployment of the application. You can access it online without any installation. [Streamlit Cloud Application](https://aqua-solubility-prediction.streamlit.app/)
+
 ### 1. Start the Streamlit Application
 ```bash
 streamlit run main1.py
@@ -69,6 +72,7 @@ For any questions or further information, feel free to reach out:
 
 ## Conclusion
 This repository provides an efficient way to predict water solubility based on molecular structures. The combination of machine learning and molecular descriptors ensures reliable predictions. For any issues or improvements, feel free to open an issue in this repository.
+
 
 
 

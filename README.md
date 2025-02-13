@@ -15,7 +15,7 @@ This repository provides a machine learning-based model for predicting the water
 ## Installation & Setup
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/ComPlat/water-solubility-prediction.git
+git clone https://github.com/ali1810/Water_Solubility.git
 cd water-solubility-prediction
 ```
 

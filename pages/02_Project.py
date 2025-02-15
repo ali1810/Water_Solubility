@@ -4,7 +4,7 @@ from footer import render_footer
 #render_footer()
     #st.title("Page 2")
     #st.write("This is the page for project details")
-image = Image.open('flow7.jpeg')
+image = Image.open('wf.jpeg')
 	    
 col1, mid, col2 = st.columns([40,0.5,0.5])
 with col1:

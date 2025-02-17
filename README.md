@@ -43,7 +43,7 @@ Along with the local version, we also provide a **Streamlit Cloud** deployment o
 
 ### 1. Start the Streamlit Application
 ```bash
-streamlit run main1.py
+streamlit run Water-Solubility.py
 ```
 
 ### 2. Input New SMILES Strings for Prediction

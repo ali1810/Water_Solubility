@@ -467,74 +467,80 @@ if st.button("Check Application Domain"):  # Runs only when clicked
     if not SMILES:  
         st.warning("Please enter a valid SMILES string.")
     else:
+        mol_weight=calc_mol_weight(SMILES)
         # Compute descriptors
-        df125_new = calculate_rdkit_features(SMILES)
-        df125 = df125_new.iloc[:, :125]
-        df38 = generate_features_single38(SMILES)
-        df128 = fingerprint1(SMILES, 2, 128)
-        df7 = get_functional_groups1(SMILES)
+        #df125_new = calculate_rdkit_features(SMILES)
+        #df125 = df125_new.iloc[:, :125]
+        #df38 = generate_features_single38(SMILES)
+        #df128 = fingerprint1(SMILES, 2, 128)
+        #df7 = get_functional_groups1(SMILES)
 
         # Combine all computed descriptors          
-        new_molecule_vector = pd.concat([df125, df128, df7, df38], axis=1)    
+        #new_molecule_vector = pd.concat([df125, df128, df7, df38], axis=1)    
         
         # Load saved training set vectors 
-        training_set_vectors = np.load("training_set_vectors.npy")  # Ensure it's a NumPy array
+        #training_set_vectors = np.load("training_set_vectors.npy")  # Ensure it's a NumPy array
         # Compute t-SNE Embeddings (Only for Visualization)
-        new_molecule_vector=clean_data(new_molecule_vector)
+        #new_molecule_vector=clean_data(new_molecule_vector)
 
 
 ### Standardize Data (Important for PCA & Mahalanobis)
 
-        scaler = StandardScaler()
-        training_set_vectors_scaled = scaler.fit_transform(training_set_vectors)
-        new_molecule_vector_scaled = scaler.transform(new_molecule_vector)
+        #scaler = StandardScaler()
+        #training_set_vectors_scaled = scaler.fit_transform(training_set_vectors)
+        #new_molecule_vector_scaled = scaler.transform(new_molecule_vector)
 
 
 # Compute t-SNE Embeddings (Only for Visualization)
 
-        tsne = TSNE(n_components=3, random_state=42, perplexity=50)
-        training_set_vectors_tsne3 = tsne.fit_transform(training_set_vectors_scaled)
+        #tsne = TSNE(n_components=3, random_state=42, perplexity=50)
+        #training_set_vectors_tsne3 = tsne.fit_transform(training_set_vectors_scaled)
 
-        tsne = TSNE(n_components=3, random_state=42, perplexity=50)
-        training_set_vectors_tsne3 = tsne.fit_transform(training_set_vectors_scaled)
+        #tsne = TSNE(n_components=3, random_state=42, perplexity=50)
+        #training_set_vectors_tsne3 = tsne.fit_transform(training_set_vectors_scaled)
 
 
 # Reduce Dimensionality with PCA for Mahalanobis Distance
 
-        pca = PCA(n_components=3)  # Use 3D PCA for meaningful distance calculations
-        training_set_vectors_pca3 = pca.fit_transform(training_set_vectors_scaled)
+        #pca = PCA(n_components=3)  # Use 3D PCA for meaningful distance calculations
+        #training_set_vectors_pca3 = pca.fit_transform(training_set_vectors_scaled)
 
 
 # Approximate New Molecule PCA Coordinates Using k-NN Regression
 
-        knn = KNeighborsRegressor(n_neighbors=5, weights="uniform")
-        knn.fit(training_set_vectors_scaled, training_set_vectors_pca3)
-        new_molecule_pca3 = knn.predict(new_molecule_vector_scaled).flatten()
+        #knn = KNeighborsRegressor(n_neighbors=5, weights="uniform")
+        #knn.fit(training_set_vectors_scaled, training_set_vectors_pca3)
+        #new_molecule_pca3 = knn.predict(new_molecule_vector_scaled).flatten()
 
 
     # Compute Mahalanobis Distance in PCA Space
 
 # Compute covariance matrix using Ledoit-Wolf for stability
-        cov_matrix = LedoitWolf().fit(training_set_vectors_pca3).covariance_
-        inv_cov_matrix = np.linalg.inv(cov_matrix)
+        #cov_matrix = LedoitWolf().fit(training_set_vectors_pca3).covariance_
+        #inv_cov_matrix = np.linalg.inv(cov_matrix)
 
 # Compute mean in PCA space
-        mean_pca = np.mean(training_set_vectors_pca3, axis=0)
+        #mean_pca = np.mean(training_set_vectors_pca3, axis=0)
 
 # Compute Mahalanobis distances of training molecules
-        distances = [mahalanobis(t, mean_pca, inv_cov_matrix) for t in training_set_vectors_pca3]
+        #distances = [mahalanobis(t, mean_pca, inv_cov_matrix) for t in training_set_vectors_pca3]
 
 # Compute Mahalanobis distance of new molecule
-        new_molecule_distance = mahalanobis(new_molecule_pca3, mean_pca, inv_cov_matrix)
+        #new_molecule_distance = mahalanobis(new_molecule_pca3, mean_pca, inv_cov_matrix)
 
 
 #  Compute Applicability Domain Threshold
 
 # Compute 90th percentile instead of MAD for better robustness
-        threshold_distance = np.percentile(distances, 95)
+        #threshold_distance = np.percentile(distances, 95)
 
+        
                # Check Applicability Domain (AD)
-        if new_molecule_distance < threshold_distance:
+        #if new_molecule_distance < threshold_distance:
+        #    st.markdown('<p style="color:green; font-weight:bold;">✅ The compound is within the Applicability Domain!</p>', unsafe_allow_html=True)
+        #else:
+        #    st.markdown('<p style="color:red; font-weight:bold;">❌ Warning: Molecule is outside the model’s applicability domain. Prediction may be unreliable!</p>', unsafe_allow_html=True)
+        if mol_weight < 600:
             st.markdown('<p style="color:green; font-weight:bold;">✅ The compound is within the Applicability Domain!</p>', unsafe_allow_html=True)
         else:
             st.markdown('<p style="color:red; font-weight:bold;">❌ Warning: Molecule is outside the model’s applicability domain. Prediction may be unreliable!</p>', unsafe_allow_html=True)
@@ -616,7 +622,7 @@ if st.button("Predict"):
         loaded_model = xgb.XGBRegressor()
         loaded_model.load_model('xgboost_model_298_4045.json')
         pred_xgb = loaded_model.predict(combined_df)
-        st.write(pred_xgb)
+        #st.write(pred_xgb)
         pred_rf2 = np.round(pred_xgb, 2)
         mol_liter1 = 10**pred_xgb
         mol_liter2 = np.round(mol_liter1, 2)

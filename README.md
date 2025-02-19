@@ -14,7 +14,7 @@ This repository provides a machine learning-based model for predicting the water
 
 ### Model Evaluation
 
-The best-performing model and its parameters were selected based on minimizing the Mean Absolute Error (MAE). We have also evaluated our model on 5 experimented data and compaare with graph how the model behave on train and test data detail has givben in the notebook 'model_evaluation_test.ipynb' 
+The best-performing model and its parameters were selected based on minimizing the Mean Absolute Error (MAE). We have also evaluated our model on 5 experimented data and compaare with graph how the model behave on train and test data detail has givben in the notebook 'model_evaluation_test_data.ipynb' 
 
 
 ## Installation & Setup

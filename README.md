@@ -23,7 +23,7 @@ cd Water_Solubility
 #### On macOS/Linux:
 ```bash
 python -m env env
-source venv/bin/activate
+source env/bin/activate
 ```
 #### On Windows:
 ```bash

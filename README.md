@@ -22,7 +22,7 @@ cd Water_Solubility
 ### 2. Create a Virtual Environment
 #### On macOS/Linux:
 ```bash
-python -m venv venv
+python -m env env
 source venv/bin/activate
 ```
 #### On Windows:

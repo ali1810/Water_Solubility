@@ -57,6 +57,7 @@ from scipy.stats import median_abs_deviation
 #render_footer()
 
 st.header("-----------Aqueous Solubility Prediction-----------")
+st.write(f"Python Version: {sys.version}")
 
 def calculate_aromatic_proportion(smiles):
     # Parse SMILES string and generate molecular representation

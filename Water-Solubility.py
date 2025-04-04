@@ -61,8 +61,8 @@ import sys
 import streamlit as st
 import xgboost as xgb
 # Output the Python version
-st.write(f"Python Version: {sys.version}")
-st.write("XGBoost version:", xgb.__version__)
+#st.write(f"Python Version: {sys.version}")
+#st.write("XGBoost version:", xgb.__version__)
 st.write("hello:")
 
 def calculate_aromatic_proportion(smiles):

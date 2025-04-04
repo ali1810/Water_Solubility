@@ -1,3 +1,4 @@
+scipy==1.10.1
 streamlit
 #streamlit==1.30.0
 #python==3.9.5

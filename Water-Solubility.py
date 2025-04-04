@@ -59,11 +59,10 @@ from scipy.stats import median_abs_deviation
 st.header("-----------Aqueous Solubility Prediction-----------")
 import sys
 import streamlit as st
-
+import xgboost as xgb
 # Output the Python version
 st.write(f"Python Version: {sys.version}")
 st.write("XGBoost version:", xgb.__version__)
-#st.write(f"Python Version: {sys.version}")
 
 def calculate_aromatic_proportion(smiles):
     # Parse SMILES string and generate molecular representation

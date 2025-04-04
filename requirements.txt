@@ -10,7 +10,7 @@ streamlit==1.24.1
 numpy==1.24.4
 gdown
 urllib3
-deepchem==2.6.1
+#deepchem==2.6.1
 #deepchem
 protobuf==3.20.3  ### in order to create Dockerfile make the changes 
 streamlit-option-menu

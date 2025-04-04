@@ -470,7 +470,7 @@ def clean_data(data):
     data = np.clip(data, -1e6, 1e6)
 
     return data
-if st.button("Check Application Domain"):  # Runs only when clicked
+if st.button("Checke Application Domain"):  # Runs only when clicked
     if not SMILES:  
         st.warning("Please enter a valid SMILES string.")
     else:

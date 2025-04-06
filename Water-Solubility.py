@@ -628,11 +628,12 @@ if st.button("Predict"):
 
         # Combine all computed descriptors
         combined_df = pd.concat([df125, df128, df7, df38], axis=1)
-        st.write(combined_df.columns)
+        new_features_ordered = combined_df[expected_order]
+        st.write(new_features_ordered.columns)
         # Load and make predictions using the model
         loaded_model = xgb.XGBRegressor()
         loaded_model.load_model('xgboost_model_298_4045.json')
-        pred_xgb = loaded_model.predict(combined_df)
+        pred_xgb = loaded_model.predict(new_features_ordered)
         #st.write(pred_xgb)
         pred_rf2 = np.round(pred_xgb, 2)
         mol_liter1 = 10**pred_xgb

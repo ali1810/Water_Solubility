@@ -52,7 +52,8 @@ from bs4 import BeautifulSoup
 import deepchem as dc
 from scipy.spatial.distance import mahalanobis
 from scipy.stats import median_abs_deviation
-
+import rdkit
+print(rdkit.__version__)
                 
 #from footer import render_footer
 #render_footer()

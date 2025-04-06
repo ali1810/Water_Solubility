@@ -67,6 +67,7 @@ import xgboost as xgb
 #st.write(f"Python Version: {sys.version}")
 st.write("XGBoost version:", xgb.__version__)
 st.write("hello")
+st.write(rdkit.__version__)
 import deepchem as dc
 import streamlit as st
 st.write("DeepChem version:", dc.__version__)

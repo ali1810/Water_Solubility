@@ -55,7 +55,8 @@ from scipy.stats import median_abs_deviation
                 
 #from footer import render_footer
 #render_footer()
-
+with open("feature_order.json", "r") as f:
+    expected_order = json.load(f)
 st.header("-----------Aqueous Solubility Prediction-----------")
 import sys
 import streamlit as st

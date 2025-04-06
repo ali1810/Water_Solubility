@@ -65,14 +65,7 @@ import streamlit as st
 import xgboost as xgb
 # Output the Python version
 import numpy as np
-st.write("Numpy version:", np.__version__)
-#st.write(f"Python Version: {sys.version}")
-st.write("XGBoost version:", xgb.__version__)
-st.write("hello")
-st.write(rdkit.__version__)
-import deepchem as dc
-import streamlit as st
-st.write("DeepChem version:", dc.__version__)
+
 def calculate_aromatic_proportion(smiles):
     # Parse SMILES string and generate molecular representation
     mol = Chem.MolFromSmiles(smiles)

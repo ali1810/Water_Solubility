@@ -633,7 +633,7 @@ if st.button("Predict"):
         # Combine all computed descriptors
         combined_df = pd.concat([df125, df128, df7, df38], axis=1)
         #new_features_ordered = combined_df[expected_order]
-        st.write(new_features_ordered.columns)
+        #st.write(new_features_ordered.columns)
         # Load and make predictions using the model
         loaded_model = xgb.XGBRegressor()
         loaded_model.load_model('xgboost_model_298_4045.json')

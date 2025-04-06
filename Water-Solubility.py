@@ -64,6 +64,8 @@ import sys
 import streamlit as st
 import xgboost as xgb
 # Output the Python version
+import numpy as np
+st.write("Numpy version:",np.__version__)
 #st.write(f"Python Version: {sys.version}")
 st.write("XGBoost version:", xgb.__version__)
 st.write("hello")

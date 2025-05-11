@@ -29,7 +29,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/mushtaqali/Downloads/streamlit-solubility-main/env"
+set -gx VIRTUAL_ENV "/Users/mushtaqali/Desktop/test3/Water_Solubility/env"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

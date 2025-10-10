@@ -630,38 +630,40 @@ if st.button("Predict"):
 
         # Combine all computed descriptors
         combined_df = pd.concat([df125, df128, df7, df38], axis=1)
+        if combined_df.empty:
+            st.error("Descriptor calculation failed for this SMILES.")
         #new_features_ordered = combined_df[expected_order]
         #st.write(new_features_ordered.columns)
         # Load and make predictions using the model
-        loaded_model = xgb.XGBRegressor()
-        loaded_model.load_model('xgboost_model_298_4045.json')
-        pred_xgb = loaded_model.predict(combined_df)
-        #st.write(pred_xgb)
-        pred_rf2 = np.round(pred_xgb, 2)
-        mol_liter1 = 10**pred_xgb
-        mol_liter2 = np.round(mol_liter1, 2)
-        MolWt1 = calc_mol_weight(SMILES)
-        Gram_liter1 = (10**pred_xgb) * MolWt1
+        else:
+          loaded_model = xgb.XGBRegressor()
+          loaded_model.load_model('xgboost_model_298_4045.json')
+          pred_xgb = loaded_model.predict(combined_df)
+          pred_rf2 = np.round(pred_xgb, 2)
+          mol_liter1 = 10**pred_xgb
+          mol_liter2 = np.round(mol_liter1, 2)
+          MolWt1 = calc_mol_weight(SMILES)
+          Gram_liter1 = (10**pred_xgb) * MolWt1
 
         # Create a DataFrame for the results
-        data = dict(
+          data = dict(
             SMILES=SMILES,
             Predicted_LogS=pred_rf2,
             Mol_Liter=mol_liter2,
             Gram_Liter=Gram_liter1,
             Experiment_Solubility_PubChem=sol,  # Includes None if solubility is unavailable
-        )
-        df = pd.DataFrame(data, index=[0])
+          )
+          df = pd.DataFrame(data, index=[0])
 
         # Display results
-        st.write('Predicted LogS values for single SMILES')
-        st.table(df.style.format({
+          st.write('Predicted LogS values for single SMILES')
+          st.table(df.style.format({
             "Predicted_LogS": "{:.2f}",
             "Mol_Liter": "{:.4f}",
             "Gram_Liter": "{:.4f}"
-        }))
-        st.write('Computed molecular descriptors')
-        st.table(combined_df)
+          }))
+          st.write('Computed molecular descriptors')
+          st.table(combined_df)
 
     except Exception as e:
         st.error(f"An error occurred: {e}")

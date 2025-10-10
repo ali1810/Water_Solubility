@@ -68,7 +68,8 @@ import numpy as np
 
 def calculate_aromatic_proportion(smiles):
     # Parse SMILES string and generate molecular representation
-    mol = Chem.MolFromSmiles(smiles)
+    #mol = Chem.MolFromSmiles(smiles)
+    mol = Chem.MolFromSmiles(SMILES, sanitize=True)
     if mol is None:
         return None  # Invalid SMILES
     
@@ -82,7 +83,8 @@ def calculate_aromatic_proportion(smiles):
     return aromatic_proportion
 ####  function for handling single smiles 
 def calculate_rdkit_features(smiles):
-    mol = Chem.MolFromSmiles(smiles)
+    mol = Chem.MolFromSmiles(SMILES, sanitize=True)
+    #mol = Chem.MolFromSmiles(smiles)
     if not mol:
         raise ValueError("Invalid SMILES string.")
     
@@ -116,7 +118,8 @@ def calculate_rdkit_features1(smiles_list):
     invalid_smiles = []
 
     for i, smiles in enumerate(smiles_list):
-        mol = Chem.MolFromSmiles(smiles)
+        #mol = Chem.MolFromSmiles(smiles)
+        mol = Chem.MolFromSmiles(SMILES, sanitize=True)
         if not mol:
             invalid_smiles.append((i, smiles))
             continue
@@ -165,12 +168,14 @@ def get_charges(smiles):
         return 0
 
 def get_many_double_bonds(smiles):
-    mol = Chem.MolFromSmiles(smiles)
+    #mol = Chem.MolFromSmiles(smiles)
+    mol = Chem.MolFromSmiles(SMILES, sanitize=True)
     double_bond_count = sum(1 for bond in mol.GetBonds() if bond.GetBondType() == Chem.rdchem.BondType.DOUBLE)
     return 1 if double_bond_count > 4 else 0
 
 def get_atom_degrees(smiles):
-    mol = Chem.MolFromSmiles(smiles)
+    #mol = Chem.MolFromSmiles(smiles)
+    mol = Chem.MolFromSmiles(SMILES, sanitize=True)
     mol = Chem.AddHs(mol)
     bonds = mol.GetBonds()
     sum_degree_vector = np.zeros(7)

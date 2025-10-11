@@ -605,21 +605,31 @@ with col2:
 
 if st.button("Predict"):
     try:
-        # Retrieve PubChem data
-     #   prop = pcp.get_properties(['MolecularWeight'], SMILES, 'smiles')
-      #  x = list(map(lambda x: x["CID"], prop))
-      #  y = x[0]
-      #  pubchem_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/%s/xml"
-      #  data = requests.get(pubchem_url % y)
+        prop = pcp.get_properties(['MolecularWeight'], SMILES, 'smiles')
+        x = list(map(lambda x: x["CID"], prop))
+        y = x[0]
+        pubchem_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/%s/XML"
+        data = requests.get(pubchem_url % y)
 
-        # Parse solubility data from PubChem
-       # html = BeautifulSoup(data.content, "xml")
-       # solubility = html.find(name='TOCHeading', string='Solubility')
-       # if solubility is None:
-        #    sol = None
-       # else:
-        #    solub = solubility.find_next_sibling('Information').find(name='String').string
-         #   sol = solub
+        # ✅ Robust solubility parser
+        from bs4 import BeautifulSoup
+        html = BeautifulSoup(data.content, "lxml-xml")
+
+        sol = None
+        solubility = html.find(name='TOCHeading', string='Solubility')
+        if solubility:
+            info_block = solubility.find_next_sibling('Information')
+            if info_block:
+                # Try <String>
+                string_tag = info_block.find(name='String')
+                if string_tag and string_tag.string:
+                    sol = string_tag.string.strip()
+                else:
+                    # Try <Value>, <Table>, or <Description>
+                    alt_tag = info_block.find(['Value', 'Table', 'Description'])
+                    if alt_tag:
+                        sol = alt_tag.get_text(strip=True)
+
 
         # Compute molecular descriptors
         df125_new = calculate_rdkit_features(SMILES)
@@ -630,7 +640,7 @@ if st.button("Predict"):
 
         # Combine all computed descriptors
         combined_df = pd.concat([df125, df128, df7, df38], axis=1)
-        st.write("💧 combined_df:", combined_df)
+        #st.write("💧 combined_df:", combined_df)
         if combined_df.empty:
             st.error("Descriptor calculation failed for this SMILES.")
         #new_features_ordered = combined_df[expected_order]
@@ -653,7 +663,7 @@ if st.button("Predict"):
             Predicted_LogS=pred_rf2,
             Mol_Liter=mol_liter2,
             Gram_Liter=Gram_liter1,
-          #  Experiment_Solubility_PubChem=sol,  # Includes None if solubility is unavailable
+            Experiment_Solubility_PubChem=sol,  # Includes None if solubility is unavailable
           )
           df = pd.DataFrame(data, index=[0])
 

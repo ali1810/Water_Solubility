@@ -655,7 +655,7 @@ if st.button("Predict"):
           mol_liter2 = np.round(mol_liter1, 2)
           MolWt1 = calc_mol_weight(SMILES)
           Gram_liter1 = (10**pred_xgb) * MolWt1
-          st.write("💧 Solubility in g/L:", Gram_liter1)
+          #st.write("💧 Solubility in g/L:", Gram_liter1)
 
         # Create a DataFrame for the results
           data = dict(

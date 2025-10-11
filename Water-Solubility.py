@@ -606,20 +606,20 @@ with col2:
 if st.button("Predict"):
     try:
         # Retrieve PubChem data
-        prop = pcp.get_properties(['MolecularWeight'], SMILES, 'smiles')
-        x = list(map(lambda x: x["CID"], prop))
-        y = x[0]
-        pubchem_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/%s/xml"
-        data = requests.get(pubchem_url % y)
+     #   prop = pcp.get_properties(['MolecularWeight'], SMILES, 'smiles')
+      #  x = list(map(lambda x: x["CID"], prop))
+      #  y = x[0]
+      #  pubchem_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/%s/xml"
+      #  data = requests.get(pubchem_url % y)
 
         # Parse solubility data from PubChem
-        html = BeautifulSoup(data.content, "xml")
-        solubility = html.find(name='TOCHeading', string='Solubility')
-        if solubility is None:
-            sol = None
-        else:
-            solub = solubility.find_next_sibling('Information').find(name='String').string
-            sol = solub
+       # html = BeautifulSoup(data.content, "xml")
+       # solubility = html.find(name='TOCHeading', string='Solubility')
+       # if solubility is None:
+        #    sol = None
+       # else:
+        #    solub = solubility.find_next_sibling('Information').find(name='String').string
+         #   sol = solub
 
         # Compute molecular descriptors
         df125_new = calculate_rdkit_features(SMILES)
@@ -653,7 +653,7 @@ if st.button("Predict"):
             Predicted_LogS=pred_rf2,
             Mol_Liter=mol_liter2,
             Gram_Liter=Gram_liter1,
-            Experiment_Solubility_PubChem=sol,  # Includes None if solubility is unavailable
+          #  Experiment_Solubility_PubChem=sol,  # Includes None if solubility is unavailable
           )
           df = pd.DataFrame(data, index=[0])
 
